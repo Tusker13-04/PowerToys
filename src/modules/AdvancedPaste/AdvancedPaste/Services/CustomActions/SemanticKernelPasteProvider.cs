@@ -152,7 +152,7 @@ namespace AdvancedPaste.Services.CustomActions
                     kernelBuilder.AddMistralChatCompletion(_config.Model, apiKey: apiKey);
                     break;
                 case AIServiceType.Google:
-                    kernelBuilder.AddGoogleAIGeminiChatCompletion(_config.Model, apiKey: apiKey);
+                    kernelBuilder.AddGoogleAIGeminiChatCompletion(_config.Model, apiKey: apiKey, apiVersion: GoogleAIVersion.V1_Beta);
                     break;
                 case AIServiceType.AzureAIInference:
                     kernelBuilder.AddAzureAIInferenceChatCompletion(_config.Model, apiKey: apiKey, endpoint: new Uri(endpoint));

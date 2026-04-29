@@ -107,7 +107,15 @@ namespace AdvancedPaste.Services.CustomActions
             }
             catch (Exception ex)
             {
-                Logger.LogError($"{nameof(CustomActionTransformService)}.{nameof(TransformAsync)} failed", ex);
+                var responseBody = (ex is HttpOperationException httpOpEx && !string.IsNullOrWhiteSpace(httpOpEx.ResponseContent)) ? httpOpEx.ResponseContent : null;
+                if (responseBody != null)
+                {
+                    Logger.LogError($"{nameof(CustomActionTransformService)}.{nameof(TransformAsync)} failed; ResponseBody={responseBody}", ex);
+                }
+                else
+                {
+                    Logger.LogError($"{nameof(CustomActionTransformService)}.{nameof(TransformAsync)} failed", ex);
+                }
                 var statusCode = ExtractStatusCode(ex);
                 var modelName = providerConfig.Model ?? string.Empty;
                 AdvancedPasteCustomActionErrorEvent errorEvent = new(providerConfig.ProviderType, modelName, statusCode, ex is PasteActionModeratedException ? PasteActionModeratedException.ErrorDescription : ex.Message);
